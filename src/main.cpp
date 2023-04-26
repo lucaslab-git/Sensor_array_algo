@@ -1,7 +1,7 @@
 #include <Arduino.h>
 
 int sensorvalues[] = {20, 20, 20, 21, 20, 30, 30, 31, 30, 21, 20, 20, 20, 20};
-
+String valuecolor[14];
 
 struct Farbe
 {
@@ -20,23 +20,26 @@ void berechnung_werte(int neuer_wert, Farbe color) {
 }
 
 void validierung_werte(Farbe color, String scolor) {
-    Serial.println(scolor + ":");
     for (size_t i = 0; i < 14; i++)
     {
      
       if (sensorvalues[i] <= color.obere_grenze && sensorvalues[i] >= color.untere_grenze)
       {
         berechnung_werte(sensorvalues[i], color);
-       
-        Serial.print(sensorvalues[i]);
-        Serial.print(", ");
+        valuecolor[i] = scolor;
       }
     }
-    Serial.println("");
+    
     
 }
 
-
+void Ausgabe(){
+  for (size_t i = 0; i < 14; i++)
+  {
+    Serial.print("|" + String(valuecolor[i]));
+  }
+  
+}
 void setup() {
   Serial.begin(9600);
   Serial.println("Bekommener Array:");
@@ -56,8 +59,10 @@ void setup() {
   weiss.obere_grenze = 22;  
 
   gruen.referenzwert = 26;
-   validierung_werte(weiss, "Weiss");
-   validierung_werte(schwarz, "schwarz");
+  validierung_werte(weiss, "WW");
+  validierung_werte(schwarz, "SS");
+
+  Ausgabe();
  
 
 }
